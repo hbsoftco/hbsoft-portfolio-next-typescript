@@ -8,3 +8,9 @@ services:
     ports:
       - 3000:3000
     command: npm start
+    networks:
+      - jenkins_hbsoft
+
+networks:
+  jenkins_hbsoft:
+    external: true
