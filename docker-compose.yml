@@ -1,6 +1,7 @@
 version: "3"
 services:
   nextjs:
+    container_name: hossein-portfolio-nextjs
     build:
       context: .
       dockerfile: Dockerfile
