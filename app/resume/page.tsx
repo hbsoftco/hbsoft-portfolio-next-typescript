@@ -66,7 +66,7 @@ const about = {
     },
     {
       fieldName: "Languages",
-      fieldValue: "English, Persian, Kurdish",
+      fieldValue: "English, Persian",
     },
   ],
 };
