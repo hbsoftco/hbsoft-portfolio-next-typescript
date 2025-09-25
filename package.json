@@ -1,5 +1,5 @@
 {
-  "name": "hbsoft-portfolio-next",
+  "name": "hossein-portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:worker": "echo 'Building worker...' && true",
-    "dev:worker": "wrangler dev --port 8771",
-    "preview:worker": "npm run dev:worker",
-    "deploy:worker": "wrangler deploy"
+    "build:worker": "next build && echo 'Worker build complete'",
+    "dev:worker": "wrangler dev ./.open-next/worker --port 8771",
+    "preview:worker": "npm run build:worker && npm run dev:worker",
+    "deploy:worker": "npm run build:worker && wrangler deploy --project-name hossein-portfolio"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
