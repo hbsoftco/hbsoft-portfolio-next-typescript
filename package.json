@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:worker": "echo 'Building worker...' && true",
+    "dev:worker": "wrangler dev --port 8771",
+    "preview:worker": "npm run dev:worker",
+    "deploy:worker": "wrangler deploy"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -29,6 +33,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.8.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
