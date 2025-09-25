@@ -6,11 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "build:worker": "next build && echo 'Worker build complete'",
-    "dev:worker": "wrangler dev ./.open-next/worker --port 8771",
-    "preview:worker": "npm run build:worker && npm run dev:worker",
-    "deploy:worker": "npm run build:worker && wrangler deploy --project-name hossein-portfolio"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
