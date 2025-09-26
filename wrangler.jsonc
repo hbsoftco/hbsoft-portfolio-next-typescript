@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "hbsoft-portfolio-next",
+  "name": "hossein-portfolio",
   "compatibility_date": "2025-09-25",
   "compatibility_flags": [
     "nodejs_compat",
@@ -14,7 +14,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "hbsoft-portfolio-next"
+      "service": "hossein-portfolio"
     }
   ],
   "r2_buckets": []
