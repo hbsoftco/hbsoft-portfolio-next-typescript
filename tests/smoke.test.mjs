@@ -111,24 +111,56 @@ test("Education content and cards remain readable at mobile and desktop widths",
   }
 });
 
-test("project slides show the matching titles and only available repository links", async () => {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 844 } });
-  await page.goto(`${origin}/work`);
-  await page.getByRole("heading", { name: "Bavexa" }).waitFor();
-  assert.equal(await page.getByRole("link", { name: /Bavexa.*repository/ }).count(), 0);
-  await page.getByRole("button", { name: "Next slide" }).click();
-  await page.getByRole("heading", { name: "Diana Panel" }).waitFor();
-  assert.equal(
-    await page.getByRole("link", { name: /Diana Panel GitHub repository/ }).getAttribute("href"),
-    "https://github.com/hbsoftco/diana-vue-admin-panel",
-  );
-  await page.getByRole("button", { name: "Next slide" }).click();
-  await page.getByRole("heading", { name: "Audio-to-Subtitle Tool" }).waitFor();
-  assert.equal(
-    await page.getByRole("link", { name: /Audio-to-Subtitle Tool GitHub repository/ }).getAttribute("href"),
-    "https://github.com/hbsoftco/persian-speech-recognition",
-  );
-  await page.close();
+test("project carousel preserves existing work and presents five professional projects", { timeout: 90_000 }, async () => {
+  const projects = [
+    { title: "Bavexa", category: "Podcast platform", github: null },
+    { title: "Diana Panel", category: "Open-source library", github: "https://github.com/hbsoftco/diana-vue-admin-panel" },
+    { title: "Audio-to-Subtitle Tool", category: "Personal project", github: "https://github.com/hbsoftco/persian-speech-recognition" },
+    { title: "RoydadOn", category: "Event Booking / Event Management", description: "An online event booking platform for discovering events and managing reservations." },
+    { title: "Malima", category: "Real Estate", description: "A real estate platform for property discovery and digital services, with structured property information management." },
+    { title: "Bitland", category: "Cryptocurrency / Digital Assets", description: "A cryptocurrency platform for accessing digital asset buying and selling services." },
+    { title: "EasyKart", category: "Financial Services / Digital Payments", description: "A digital financial services platform offering payment services and international transaction solutions." },
+    { title: "Kartabl", category: "Remote Workforce Management", description: "A remote workforce management platform with employee workspaces, time tracking, activity monitoring, administrative reporting, and employee management." },
+  ];
+  assert.equal(new Set(projects.map((project) => project.title)).size, projects.length);
+
+  for (const width of [390, 768, 1024, 1280]) {
+    const page = await browser.newPage({ viewport: { width, height: 844 } });
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    await page.goto(`${origin}/work`);
+    assert.equal(await page.locator(".swiper-slide").count(), projects.length);
+    for (const [index, project] of projects.entries()) {
+      if (index) await page.getByRole("button", { name: "Next slide" }).click();
+      await page.getByRole("heading", { name: project.title, exact: true }).waitFor();
+      assert.equal(await page.locator(".text-outline").textContent(), String(index + 1).padStart(2, "0"));
+      assert.equal(await page.locator("h1").locator("..").locator("p").textContent(), project.category);
+      await page.locator(".swiper-slide-active").getByText(project.title, { exact: true }).waitFor();
+      assert.equal(await page.locator(".swiper-slide-active img").count(), 0);
+      if (project.description) {
+        await page.getByText(project.description, { exact: true }).waitFor();
+        assert.equal(await page.getByRole("list", { name: "Technologies" }).count(), 0);
+      }
+      const github = page.getByRole("link", { name: `Open ${project.title} GitHub repository` });
+      assert.equal(await github.count(), project.github ? 1 : 0);
+      if (project.github) assert.equal(await github.getAttribute("href"), project.github);
+      assert.equal(await page.getByRole("link", { name: `Open ${project.title} live project` }).count(), 0);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), `Work overflows at ${width}px on ${project.title}`);
+    }
+    if (screenshotDir && (width === 390 || width === 1280)) {
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: `${screenshotDir}/work-kartabl-${width}.png` });
+      if (width === 390) {
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        await page.screenshot({ path: `${screenshotDir}/work-kartabl-${width}-bottom.png` });
+      }
+    }
+    assert.deepEqual(errors, [], `Work browser errors at ${width}px`);
+    await page.close();
+  }
 });
 
 test("CV, social URLs, and metadata are present", async () => {

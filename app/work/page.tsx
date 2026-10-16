@@ -14,11 +14,24 @@ import {
 } from "@/components/ui/tooltip";
 import WorkSliderBtns from "@/components/WorkSliderBtns";
 
-const projects = [
+type Project = {
+  num: string;
+  category: string;
+  title: string;
+  description: string;
+  kind: "professional" | "personal" | "open-source";
+  stack?: string[];
+  image?: string | null;
+  live?: string | null;
+  github?: string | null;
+};
+
+const projects: Project[] = [
   {
     num: "01",
     category: "Podcast platform",
     title: "Bavexa",
+    kind: "professional",
     description:
       "A Persian podcast PWA architected for scale. I led its layered Vue/Nuxt frontend, validated API boundaries with Zod, and built audio and offline-first features.",
     stack: ["Nuxt 4", "Vue 3", "TypeScript", "Pinia", "Workbox"],
@@ -30,6 +43,7 @@ const projects = [
     num: "02",
     category: "Open-source library",
     title: "Diana Panel",
+    kind: "open-source",
     description:
       "A Vue admin component library in active development, with typed DaisyUI-based components, consistent theming, and Persian/English support.",
     stack: ["Vue", "TypeScript", "DaisyUI"],
@@ -41,6 +55,7 @@ const projects = [
     num: "03",
     category: "Personal project",
     title: "Audio-to-Subtitle Tool",
+    kind: "personal",
     description:
       "A full-stack tool for audio upload, self-hosted Persian speech recognition, downloadable SRT files, and synchronized playback.",
     stack: ["Whisper", "Persian ASR", "SRT"],
@@ -48,11 +63,47 @@ const projects = [
     live: null,
     github: "https://github.com/hbsoftco/persian-speech-recognition",
   },
+  {
+    num: "04",
+    category: "Event Booking / Event Management",
+    title: "RoydadOn",
+    kind: "professional",
+    description: "An online event booking platform for discovering events and managing reservations.",
+  },
+  {
+    num: "05",
+    category: "Real Estate",
+    title: "Malima",
+    kind: "professional",
+    description: "A real estate platform for property discovery and digital services, with structured property information management.",
+  },
+  {
+    num: "06",
+    category: "Cryptocurrency / Digital Assets",
+    title: "Bitland",
+    kind: "professional",
+    description: "A cryptocurrency platform for accessing digital asset buying and selling services.",
+  },
+  {
+    num: "07",
+    category: "Financial Services / Digital Payments",
+    title: "EasyKart",
+    kind: "professional",
+    description: "A digital financial services platform offering payment services and international transaction solutions.",
+  },
+  {
+    num: "08",
+    category: "Remote Workforce Management",
+    title: "Kartabl",
+    kind: "professional",
+    description: "A remote workforce management platform with employee workspaces, time tracking, activity monitoring, administrative reporting, and employee management.",
+  },
 ];
 
 const Work = () => {
   const [project, setProject] = useState(projects[0]);
   const reduceMotion = useReducedMotion();
+  const stack = project.stack ?? [];
 
   const handleSlideChange = (swiper: SwiperClass) => {
     setProject(projects[swiper.activeIndex] ?? projects[0]);
@@ -81,13 +132,15 @@ const Work = () => {
                 </h1>
               </div>
               <p className="text-white/60 max-w-[600px]">{project.description}</p>
-              <ul className="flex flex-wrap gap-x-3 gap-y-1" aria-label="Technologies">
-                {project.stack.map((item, index) => (
-                  <li key={item} className="text-lg text-accent">
-                    {item}{index !== project.stack.length - 1 && ","}
-                  </li>
-                ))}
-              </ul>
+              {stack.length > 0 && (
+                <ul className="flex flex-wrap gap-x-3 gap-y-1" aria-label="Technologies">
+                  {stack.map((item, index) => (
+                    <li key={item} className="text-lg text-accent">
+                      {item}{index !== stack.length - 1 && ","}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <div className="border border-white/20" />
               {(project.live || project.github) && (
                 <div className="flex items-center gap-4">
