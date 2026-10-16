@@ -33,7 +33,7 @@ const Photo = () => {
           <Image
             src="/assets/hbsoft.png"
             priority
-            quality={100}
+            unoptimized
             fill
             alt="Portrait of Hossein Bajan"
             className="object-contain"
