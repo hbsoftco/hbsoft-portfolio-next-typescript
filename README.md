@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hossein Bajan portfolio
 
-## Getting Started
+A Next.js App Router portfolio for Hossein Bajan. Content is maintained in the existing page and component files. The Education data and markup in `app/resume/page.tsx` are protected and must remain unchanged.
 
-First, run the development server:
+## Local development
+
+Use Node.js 20 or later and npm. Install with `npm ci`, then run `npm run dev`.
+
+Before shipping, run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx tsc --noEmit --incremental false
+npm run lint
+npm run build
+npx opennextjs-cloudflare build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The browser smoke suite uses a locally running production build and a Chrome executable:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start -- --hostname 127.0.0.1 --port 3100
+# In another terminal:
+CHROME_PATH=/usr/bin/google-chrome npm run test:smoke
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Set `PORTFOLIO_URL` if the server uses another address. Set `SCREENSHOT_DIR` to save desktop and mobile viewport captures outside the repository.
 
-## Learn More
+## Deployment and contact
 
-To learn more about Next.js, take a look at the following resources:
+The repository includes Docker and Cloudflare OpenNext configurations. Deploy only after validating the intended target; the local build command does not deploy. Set `NEXT_PUBLIC_SITE_URL` to the verified public origin to enable canonical URLs and populated sitemap entries. Without it, no production domain is assumed.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The Contact form opens an email draft in the visitor's email application. It does not send a message through a server. The CV button serves the unchanged source PDF from `public/resume/`.

@@ -1,11 +1,9 @@
-import Link from "next/link";
-import { FaGithub, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaStackOverflow } from "react-icons/fa";
 
 const socials = [
-  { icon: <FaGithub />, path: "" },
-  { icon: <FaLinkedin />, path: "" },
-  { icon: <FaYoutube />, path: "" },
-  { icon: <FaTwitter />, path: "" },
+  { icon: <FaGithub />, path: "https://github.com/hbsoftco", label: "GitHub" },
+  { icon: <FaLinkedin />, path: "https://linkedin.com/in/hbsoftco", label: "LinkedIn" },
+  { icon: <FaStackOverflow />, path: "https://stackoverflow.com/users/4308163/hossein-bajan", label: "Stack Overflow" },
 ];
 
 interface SocialProps {
@@ -18,9 +16,9 @@ const Social = ({ containerStyles, iconStyles }: SocialProps) => {
     <div className={containerStyles}>
       {socials.map((item, index) => {
         return (
-          <Link href={item.path} key={index} className={iconStyles}>
+          <a href={item.path} key={index} className={iconStyles} aria-label={item.label} target="_blank" rel="noopener noreferrer">
             {item.icon}
-          </Link>
+          </a>
         );
       })}
     </div>

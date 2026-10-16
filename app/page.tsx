@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FiDownload } from "react-icons/fi";
+import Link from "next/link";
 
 // components
 import Social from "@/components/Social";
@@ -13,24 +14,23 @@ const Home = () => {
         <div className="flex flex-col xl:flex-row items-center justify-between xl:pt-8 xl:pb-24">
           {/* text */}
           <div className="text-center xl:text-left order-2 xl:order-none">
-            <span className="text-xl">Software Engineer</span>
+            <span className="text-xl">Senior Front-End Engineer</span>
             <h1 className="h1 mb-6">
               {`Hello I'm`} <br />{" "}
               <span className="text-accent">Hossein Bajan</span>
             </h1>
             <p className="max-w-[500px] mb-9 text-white/80">
-              Seasoned Full-Stack Developer with +7 years of experience leading
-              both front-end and back-end development.
+              I build scalable Vue.js and Nuxt.js applications. With 9+ years of experience,
+              my work has spanned TypeScript architecture, offline-first PWAs,
+              complex platforms, and engineering leadership.
             </p>
             {/* btn and social */}
             <div className="flex flex-col xl:flex-row items-center gap-8">
-              <Button
-                variant="outline"
-                size="lg"
-                className="uppercase flex items-center gap-2"
-              >
-                <span>Download CV</span>
-                <FiDownload className="text-xl" />
+              <Button asChild variant="outline" size="lg" className="uppercase flex items-center gap-2">
+                <Link href="/resume/Hossein-Bajan-Resume.pdf" download aria-label="Download Hossein Bajan's CV as a PDF">
+                  <span>Download CV</span>
+                  <FiDownload className="text-xl" aria-hidden="true" />
+                </Link>
               </Button>
               <div className="mb-8 xl:mb-0">
                 <Social

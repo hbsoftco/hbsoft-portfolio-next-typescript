@@ -12,61 +12,55 @@ import {
 import { motion } from "framer-motion";
 
 import {
-  FaCss3,
-  FaDocker,
-  FaHtml5,
-  FaJs,
-  FaLinux,
-  FaNodeJs,
-  FaReact,
-  FaVuejs,
+  FaCode,
+  FaCodeBranch,
+  FaProjectDiagram,
+  FaUsers,
 } from "react-icons/fa";
 import {
+  SiAngular,
+  SiDocker,
   SiExpress,
+  SiGitlab,
+  SiJenkins,
+  SiLinux,
+  SiMongodb,
+  SiMysql,
   SiNestjs,
-  SiNextdotjs,
+  SiNginx,
+  SiNodedotjs,
   SiNuxtdotjs,
+  SiPrisma,
+  SiPwa,
+  SiRabbitmq,
+  SiRedis,
+  SiSequelize,
   SiTailwindcss,
   SiTypescript,
+  SiVuedotjs,
 } from "react-icons/si";
 
 // about data
 const about = {
   title: "About me",
   description:
-    "Duis minim ea ullamco excepteur voluptate consequat Lorem. Tempor do ullamco in sint sint magna.",
+    "I specialize in Vue.js and Nuxt.js architecture, type-safe applications, and offline-first PWAs. My work spans complex consumer platforms and admin panels, with close collaboration across product and design teams. I also mentor engineers and review code to keep systems maintainable.",
   info: [
     {
       fieldName: "Name",
       fieldValue: "Hossein Bajan",
     },
     {
-      fieldName: "Phone",
-      fieldValue: "(+98) 915 585 9539",
-    },
-    {
       fieldName: "Experience",
-      fieldValue: "8+ Years",
-    },
-    {
-      fieldName: "Skype",
-      fieldValue: "hbsoftco",
-    },
-    {
-      fieldName: "Nationality",
-      fieldValue: "Iran",
+      fieldValue: "9+ years",
     },
     {
       fieldName: "Email",
       fieldValue: "hossein.bajan@gmail.com",
     },
     {
-      fieldName: "Freelance",
-      fieldValue: "Available",
-    },
-    {
-      fieldName: "Languages",
-      fieldValue: "English, Persian",
+      fieldName: "Focus",
+      fieldValue: "Vue.js / Nuxt.js",
     },
   ],
 };
@@ -76,37 +70,27 @@ const experience = {
   icon: "/assets/resume/badge.svg",
   title: "My experience",
   description:
-    "Ullamco officia tempor labore ex dolore sit aliqua ipsum enim. Cupidatat et Lorem labore deserunt.",
+    "Frontend architecture, full-stack delivery, and technical leadership across consumer products, admin platforms, and offline-first applications.",
   items: [
     {
-      company: "Aminsoft Inc.",
-      position: "Technical Team Lead - Full Stack Developer",
-      duration: "2020 - Present",
+      company: "LastSecond",
+      position: "Senior Front-End Developer",
+      duration: "06/2024 - Present",
     },
     {
-      company: "RoydadOn Tech Solution",
-      position: "Front-End Developer",
-      duration: "2018 - 2021",
-    },
-    {
-      company: "Malima",
-      position: "Full Stack Developer",
-      duration: "2016 - 2019",
-    },
-    {
-      company: "Aminsoft Inc.",
-      position: "Technical Team Lead - Full Stack Developer",
-      duration: "2020 - Present",
-    },
-    {
-      company: "RoydadOn Tech Solution",
-      position: "Front-End Developer",
-      duration: "2018 - 2021",
+      company: "Aminsoft",
+      position: "Technical Team Lead – Full Stack Developer",
+      duration: "04/2020 - 05/2024",
     },
     {
       company: "Malima",
-      position: "Full Stack Developer",
-      duration: "2016 - 2019",
+      position: "Co-Founder – Full Stack Developer",
+      duration: "09/2020 - 12/2023",
+    },
+    {
+      company: "RoydadOn",
+      position: "Front-End Developer",
+      duration: "10/2016 - 11/2019",
     },
   ],
 };
@@ -135,63 +119,57 @@ const education = {
 const skills = {
   title: "My skills",
   description:
-    "Quis consequat elit enim pariatur reprehenderit qui minim enim dolore.",
-  items: [
+    "Tools and practices I use across frontend architecture, full-stack development, and delivery.",
+  groups: [
     {
-      icon: <FaHtml5 />,
-      name: "html 5",
+      title: "Frontend",
+      items: [
+        { icon: <SiVuedotjs />, name: "Vue.js" },
+        { icon: <SiNuxtdotjs />, name: "Nuxt.js" },
+        { icon: <SiTypescript />, name: "TypeScript" },
+        { icon: <SiAngular />, name: "Angular" },
+        { icon: <SiTailwindcss />, name: "Tailwind CSS" },
+        { icon: <SiPwa />, name: "Progressive Web Apps" },
+      ],
     },
     {
-      icon: <FaCss3 />,
-      name: "css 3",
+      title: "Backend",
+      items: [
+        { icon: <SiNodedotjs />, name: "Node.js" },
+        { icon: <SiNestjs />, name: "NestJS" },
+        { icon: <SiExpress />, name: "Express.js" },
+        { icon: <FaCode />, name: "REST APIs" },
+        { icon: <SiRedis />, name: "Redis" },
+        { icon: <SiRabbitmq />, name: "RabbitMQ" },
+      ],
     },
     {
-      icon: <FaJs />,
-      name: "javascript",
+      title: "Databases and ORM",
+      items: [
+        { icon: <SiMysql />, name: "MySQL" },
+        { icon: <SiMongodb />, name: "MongoDB" },
+        { icon: <SiPrisma />, name: "Prisma" },
+        { icon: <SiSequelize />, name: "Sequelize" },
+      ],
     },
     {
-      icon: <SiTypescript />,
-      name: "typescript",
+      title: "DevOps",
+      items: [
+        { icon: <SiDocker />, name: "Docker / Compose" },
+        { icon: <SiNginx />, name: "Nginx" },
+        { icon: <SiGitlab />, name: "GitLab CI/CD" },
+        { icon: <SiJenkins />, name: "Jenkins" },
+        { icon: <SiLinux />, name: "Linux" },
+      ],
     },
     {
-      icon: <FaReact />,
-      name: "react.js",
-    },
-    {
-      icon: <SiNextdotjs />,
-      name: "next.js",
-    },
-    {
-      icon: <SiTailwindcss />,
-      name: "tailwind.css",
-    },
-    {
-      icon: <FaNodeJs />,
-      name: "node.js",
-    },
-    {
-      icon: <SiNestjs />,
-      name: "nest.js",
-    },
-    {
-      icon: <SiExpress />,
-      name: "express.js",
-    },
-    {
-      icon: <FaVuejs />,
-      name: "express.js",
-    },
-    {
-      icon: <SiNuxtdotjs />,
-      name: "nuxt.js",
-    },
-    {
-      icon: <FaDocker />,
-      name: "docker",
-    },
-    {
-      icon: <FaLinux />,
-      name: "linux",
+      title: "Engineering",
+      items: [
+        { icon: <FaUsers />, name: "Agile / Scrum" },
+        { icon: <FaCodeBranch />, name: "Code review" },
+        { icon: <FaUsers />, name: "Team mentoring" },
+        { icon: <FaProjectDiagram />, name: "System architecture" },
+      ],
     },
   ],
 };
@@ -298,26 +276,31 @@ const Resume = () => {
                   </p>
                 </div>
                 <ScrollArea className="h-[400px]">
-                  <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:gap-[30px] gap-4">
-                    {skills.items.map((skill, index) => {
-                      return (
-                        <li key={index}>
-                          <TooltipProvider delayDuration={100}>
-                            <Tooltip>
-                              <TooltipTrigger className="w-full h-[150px] bg-[#232329] rounded-xl flex justify-center items-center group">
-                                <div className="text-6xl group-hover:text-accent transition-all duration-300">
-                                  {skill.icon}
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="capitalize">{skill.name}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <div className="flex flex-col gap-8 pr-4">
+                    {skills.groups.map((group) => (
+                      <section key={group.title} aria-label={group.title}>
+                        <h4 className="text-xl font-semibold mb-4">{group.title}</h4>
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:gap-[30px] gap-4">
+                          {group.items.map((skill) => (
+                            <li key={skill.name}>
+                              <TooltipProvider delayDuration={100}>
+                                <Tooltip>
+                                  <TooltipTrigger aria-label={skill.name} className="w-full h-[150px] bg-[#232329] rounded-xl flex justify-center items-center group">
+                                    <span aria-hidden="true" className="text-6xl group-hover:text-accent transition-all duration-300">
+                                      {skill.icon}
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>{skill.name}</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
                 </ScrollArea>
               </div>
             </TabsContent>

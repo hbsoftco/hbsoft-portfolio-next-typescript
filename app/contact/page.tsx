@@ -13,7 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { FaPhoneAlt, FaEnvelope, FaMapMarkedAlt } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { FormEvent } from "react";
 
 import { motion } from "framer-motion";
 
@@ -21,21 +22,33 @@ const info = [
   {
     icon: <FaPhoneAlt />,
     title: "Phone",
-    description: "(+98) 915 585 9539",
+    description: "(+98) 915-585-9539",
+    href: "tel:+989155859539",
   },
   {
     icon: <FaEnvelope />,
     title: "Email",
     description: "hossein.bajan@gmail.com",
-  },
-  {
-    icon: <FaMapMarkedAlt />,
-    title: "Address",
-    description: "Iran, Tehran",
+    href: "mailto:hossein.bajan@gmail.com",
   },
 ];
 
 const Contact = () => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const fields = new FormData(event.currentTarget);
+    const name = `${fields.get("firstName") ?? ""} ${fields.get("lastName") ?? ""}`.trim();
+    const subject = `Portfolio inquiry: ${fields.get("topic") ?? "General"}`;
+    const body = [
+      `Name: ${name}`,
+      `Email: ${fields.get("email") ?? ""}`,
+      `Phone: ${fields.get("phone") ?? ""}`,
+      "",
+      String(fields.get("message") ?? ""),
+    ].join("\n");
+    window.location.href = `mailto:hossein.bajan@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -52,47 +65,51 @@ const Contact = () => {
       <div className="container mx-auto">
         <div className="flex flex-col xl:flex-row gap-[30px]">
           {/* form */}
-          <div className="xl:h-[54%] order-2 xl:order-none">
-            <form className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
-              <h3 className="text-4xl text-accent">{`Let's work together`}</h3>
+          <div className="w-full xl:w-[65%] xl:flex-none order-2 xl:order-none">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
+              <h1 className="text-4xl text-accent">Get in touch</h1>
               <p className="text-white/60">
-                Exercitation consequat nulla tempor dolore nisi non fugiat quis
-                laboris.
+                Send an engineering question or collaboration note. This form opens
+                your email app so you can review and send the message yourself.
               </p>
               {/* input */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input type="firstName" placeholder="FirstName" />
-                <Input type="lastName" placeholder="LastName" />
-                <Input type="firstName" placeholder="Email address" />
-                <Input type="phoneNumber" placeholder="Phone number" />
+                <Input type="text" name="firstName" aria-label="First name" placeholder="First name" required />
+                <Input type="text" name="lastName" aria-label="Last name" placeholder="Last name" required />
+                <Input type="email" name="email" aria-label="Email address" placeholder="Email address" required />
+                <Input type="tel" name="phone" aria-label="Phone number (optional)" placeholder="Phone number (optional)" />
               </div>
               {/* select */}
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue className="" placeholder="Select a service" />
+              <Select name="topic">
+                <SelectTrigger className="w-full" aria-label="Inquiry topic">
+                  <SelectValue placeholder="Select a topic" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Select a service</SelectLabel>
-                    <SelectItem value="est">Web Development</SelectItem>
-                    <SelectItem value="cst">UX/UI Design</SelectItem>
-                    <SelectItem value="mst">Logo Design</SelectItem>
+                    <SelectLabel>Select a topic</SelectLabel>
+                    <SelectItem value="Frontend Architecture">Frontend Architecture</SelectItem>
+                    <SelectItem value="Web Applications">Web Applications</SelectItem>
+                    <SelectItem value="Offline-First PWAs">Offline-First PWAs</SelectItem>
+                    <SelectItem value="Technical Leadership">Technical Leadership</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
               {/* textarea */}
               <Textarea
                 className="h-[200px]"
+                name="message"
+                aria-label="Message"
                 placeholder="Type your message here."
+                required
               />
               {/* btn */}
-              <Button size="default" className="max-w-40">
-                Send message
+              <Button type="submit" size="default" className="max-w-48">
+                Open email draft
               </Button>
             </form>
           </div>
           {/* info */}
-          <div className="flex-1 flex items-center xl:justify-end order-1 xl:order-none mb-8 xl:mb-0">
+          <div className="flex-1 min-w-0 flex items-center xl:justify-end order-1 xl:order-none mb-8 xl:mb-0">
             <ul className="flex flex-col gap-10">
               {info.map((item, index) => {
                 return (
@@ -102,7 +119,7 @@ const Contact = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-white/60">{item.title}</p>
-                      <h3 className="text-xl">{item.description}</h3>
+                      <a href={item.href} className="text-xl hover:text-accent break-words">{item.description}</a>
                     </div>
                   </li>
                 );

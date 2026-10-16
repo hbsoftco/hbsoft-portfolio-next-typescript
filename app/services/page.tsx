@@ -1,37 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { BsArrowDownRight } from "react-icons/bs";
 
 const services = [
   {
     num: "01",
-    title: "Web Development",
+    title: "Frontend Architecture",
     description:
-      "Dolore Lorem proident consequat aute ad incididunt culpa esse id incididunt culpa non aute.",
-    href: "",
+      "Architecture for maintainable Vue.js and Nuxt.js applications, with typed data boundaries and reusable components.",
   },
   {
     num: "02",
-    title: "UI/UX",
+    title: "Web Applications",
     description:
-      "Dolore Lorem proident consequat aute ad incididunt culpa esse id incididunt culpa non aute.",
-    href: "",
+      "End-to-end development of complex frontends and admin panels with TypeScript, APIs, and dependable delivery workflows.",
   },
   {
     num: "03",
-    title: "Logo Design",
+    title: "Offline-First PWAs",
     description:
-      "Dolore Lorem proident consequat aute ad incididunt culpa esse id incididunt culpa non aute.",
-    href: "",
+      "Progressive web applications with resilient caching, offline access, and service worker integration.",
   },
   {
     num: "04",
-    title: "SEO",
+    title: "Technical Leadership",
     description:
-      "Dolore Lorem proident consequat aute ad incididunt culpa esse id incididunt culpa non aute.",
-    href: "",
+      "Code review, mentoring, and architecture decisions informed by hands-on delivery across product teams.",
   },
 ];
 
@@ -62,12 +57,9 @@ const Services = () => {
                   <div className="text-5xl font-extrabold text-outline text-transparent group-hover:text-outline-hover transition-all duration-500">
                     {service.num}
                   </div>
-                  <Link
-                    href={service.href}
-                    className="w-[70px] h-[70px] rounded-full bg-white group-hover:bg-accent transition-all duration-500 flex justify-center items-center hover:-rotate-45"
-                  >
+                  <span aria-hidden="true" className="w-[70px] h-[70px] rounded-full bg-white group-hover:bg-accent transition-all duration-500 flex justify-center items-center group-hover:-rotate-45">
                     <BsArrowDownRight className="text-primary text-3xl" />
-                  </Link>
+                  </span>
                 </div>
                 {/* heading */}
                 <h2 className="text-[42px] font-bold leading-none text-white group-hover:text-accent transition-all duration-500">
