@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
 import StairTransition from "@/components/StairTransition";
+import NavigationProgress from "@/components/NavigationProgress";
 
 const jetBrainMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -14,25 +15,25 @@ const jetBrainMono = JetBrains_Mono({
 });
 
 const description =
-  "Hossein Bajan is a Senior Front-End Engineer focused on Vue.js, Nuxt.js, TypeScript, and offline-first web applications.";
+  "Hossein Bajan is a Software Engineer focused on Vue.js, Nuxt.js, TypeScript, and offline-first web applications.";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
   title: {
-    default: "Hossein Bajan | Senior Front-End Engineer",
+    default: "Hossein Bajan | Software Engineer",
     template: "%s | Hossein Bajan",
   },
   description,
   openGraph: {
     type: "website",
     siteName: "Hossein Bajan",
-    title: "Hossein Bajan | Senior Front-End Engineer",
+    title: "Hossein Bajan | Software Engineer",
     description,
   },
   twitter: {
     card: "summary",
-    title: "Hossein Bajan | Senior Front-End Engineer",
+    title: "Hossein Bajan | Software Engineer",
     description,
   },
   alternates: siteUrl ? { canonical: "/" } : undefined,
@@ -53,7 +54,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Hossein Bajan",
-              jobTitle: "Senior Front-End Engineer",
+              jobTitle: "Software Engineer",
               sameAs: [
                 "https://linkedin.com/in/hbsoftco",
                 "https://github.com/hbsoftco",
@@ -62,9 +63,11 @@ export default function RootLayout({
             }),
           }}
         />
-        <Header />
-        <StairTransition />
-        <PageTransition>{children}</PageTransition>
+        <NavigationProgress>
+          <Header />
+          <StairTransition />
+          <PageTransition>{children}</PageTransition>
+        </NavigationProgress>
       </body>
     </html>
   );

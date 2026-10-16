@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -52,6 +52,7 @@ const projects = [
 
 const Work = () => {
   const [project, setProject] = useState(projects[0]);
+  const reduceMotion = useReducedMotion();
 
   const handleSlideChange = (swiper: SwiperClass) => {
     setProject(projects[swiper.activeIndex] ?? projects[0]);
@@ -62,7 +63,7 @@ const Work = () => {
       initial={{ opacity: 0 }}
       animate={{
         opacity: 1,
-        transition: { delay: 2.3, duration: 0.3, ease: "easeIn" },
+        transition: { delay: reduceMotion ? 0 : 0.65, duration: reduceMotion ? 0 : 0.3, ease: "easeIn" },
       }}
       className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0"
     >

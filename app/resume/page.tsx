@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import {
   FaCode,
@@ -44,7 +44,7 @@ import {
 const about = {
   title: "About me",
   description:
-    "I specialize in Vue.js and Nuxt.js architecture, type-safe applications, and offline-first PWAs. My work spans complex consumer platforms and admin panels, with close collaboration across product and design teams. I also mentor engineers and review code to keep systems maintainable.",
+    "I am a Software Engineer specializing in Vue.js and Nuxt.js architecture, type-safe applications, and offline-first PWAs. My work spans complex consumer platforms and admin panels, with close collaboration across product and design teams. I also mentor engineers and review code to keep systems maintainable.",
   info: [
     {
       fieldName: "Name",
@@ -100,7 +100,7 @@ const education = {
   icon: "/assets/resume/cap.svg",
   title: "My education",
   description:
-    "Occaecat do eiusmod ullamco id tempor labore consectetur tempor.",
+    "My academic background in Computer Science and Software Engineering provides a strong foundation in software design, system architecture, and problem-solving, complementing my hands-on experience in building scalable software applications.",
   items: [
     {
       institution: "Islamic Azad University",
@@ -174,15 +174,27 @@ const skills = {
   ],
 };
 
+const languages = {
+  title: "Languages",
+  description: "Languages I use in conversation and everyday life. Levels are self-assessed, not certifications.",
+  items: [
+    { name: "Persian (Farsi)", proficiency: "Native" },
+    { name: "Kurdish (Kurmanji)", proficiency: "Native" },
+    { name: "English", proficiency: "B2 — Upper-Intermediate" },
+    { name: "German", proficiency: "A2 — Elementary" },
+  ],
+};
+
 const Resume = () => {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{
         opacity: 1,
         transition: {
-          delay: 2.3,
-          duration: 0.3,
+          delay: reduceMotion ? 0 : 0.65,
+          duration: reduceMotion ? 0 : 0.3,
           ease: "easeIn",
         },
       }}
@@ -198,6 +210,7 @@ const Resume = () => {
             <TabsTrigger value={"education"}>Education</TabsTrigger>
             <TabsTrigger value={"skills"}>Skills</TabsTrigger>
             <TabsTrigger value={"about"}>About me</TabsTrigger>
+            <TabsTrigger value={"languages"}>Languages</TabsTrigger>
           </TabsList>
 
           {/* content */}
@@ -247,16 +260,16 @@ const Resume = () => {
                       return (
                         <li
                           key={index}
-                          className="bg-[#232329] h-[184px] py-6 px-10 rounded-xl flex flex-col justify-center items-center lg:items-start gap-1"
+                          className="bg-[#232329] min-h-[184px] py-6 px-10 rounded-xl flex flex-col justify-center items-center lg:items-start gap-1"
                         >
                           <span className="text-accent">{item.duration}</span>
-                          <h3 className="text-xl max-w-[260px] min-h-[60px] text-center lg:text-left">
+                          <h3 className="text-xl max-w-[260px] text-center lg:text-left break-words">
                             {item.degree}
                           </h3>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-start gap-3">
                             {/* dot */}
-                            <span className="w-[6px] h-[6px] rounded-full bg-accent"></span>
-                            <p className="text-white/60">{item.institution}</p>
+                            <span className="w-[6px] h-[6px] shrink-0 mt-[9px] rounded-full bg-accent"></span>
+                            <p className="text-white/60 break-words">{item.institution}</p>
                           </div>
                         </li>
                       );
@@ -327,6 +340,24 @@ const Resume = () => {
                       </li>
                     );
                   })}
+                </ul>
+              </div>
+            </TabsContent>
+
+            {/* languages */}
+            <TabsContent value="languages" className="w-full">
+              <div className="flex flex-col gap-[30px] text-center xl:text-left">
+                <h3 className="text-4xl font-bold">{languages.title}</h3>
+                <p className="max-w-[600px] text-white/60 mx-auto xl:mx-0">
+                  {languages.description}
+                </p>
+                <ul className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
+                  {languages.items.map((language) => (
+                    <li key={language.name} className="bg-[#232329] min-h-[160px] py-6 px-10 rounded-xl flex flex-col justify-center gap-2">
+                      <h4 className="text-xl font-semibold">{language.name}</h4>
+                      <p className="text-accent">{language.proficiency}</p>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </TabsContent>

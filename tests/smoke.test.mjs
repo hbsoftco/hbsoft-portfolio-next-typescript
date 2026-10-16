@@ -22,7 +22,7 @@ after(async () => {
 });
 
 const routes = [
-  ["/", "Senior Front-End Engineer"],
+  ["/", "Software Engineer"],
   ["/services", "Frontend Architecture"],
   ["/resume", "My experience"],
   ["/work", "Bavexa"],
@@ -71,17 +71,40 @@ test("all routes render without horizontal overflow or browser errors", { timeou
   }
 });
 
-test("Education tab retains its two existing entries", async () => {
-  for (const width of [390, 1280]) {
+test("Education content and cards remain readable at mobile and desktop widths", async () => {
+  for (const width of [320, 390, 768, 1280]) {
     const page = await browser.newPage({ viewport: { width, height: 844 } });
     await page.goto(`${origin}/resume`);
     await page.getByRole("tab", { name: "Education" }).click();
     await page.getByText("My education", { exact: true }).waitFor();
-    assert.equal(await page.getByText("Islamic Azad University", { exact: true }).count(), 2);
-    await page.getByText("Master's degree, Computer Software Engineering").waitFor();
-    await page.getByText("Bachelor's degree, Computer Science").waitFor();
-    if (screenshotDir) {
-      await page.waitForTimeout(3200);
+    await page.getByText("My academic background in Computer Science and Software Engineering provides a strong foundation in software design, system architecture, and problem-solving, complementing my hands-on experience in building scalable software applications.", { exact: true }).waitFor();
+    assert.equal(await page.getByText("Occaecat do eiusmod ullamco id tempor labore consectetur tempor.").count(), 0);
+    const cards = page.locator('[role="tabpanel"][data-state="active"] li');
+    assert.deepEqual(await cards.evaluateAll((items) => items.map((card) => ({
+      year: card.querySelector("span")?.textContent,
+      degree: card.querySelector("h3")?.textContent,
+      institution: card.querySelector("p")?.textContent,
+    }))), [
+      { year: "2018", degree: "Master's degree, Computer Software Engineering", institution: "Islamic Azad University" },
+      { year: "2014", degree: "Bachelor's degree, Computer Science", institution: "Islamic Azad University" },
+    ]);
+    for (const card of await cards.all()) {
+      const fits = await card.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        const date = element.querySelector("span")?.getBoundingClientRect();
+        const degree = element.querySelector("h3")?.getBoundingClientRect();
+        const institution = element.querySelector("p")?.getBoundingClientRect();
+        return date && degree && institution &&
+          date.top >= box.top && date.bottom <= degree.top + 1 &&
+          degree.bottom <= institution.top + 1 && institution.bottom <= box.bottom + 1 &&
+          degree.left >= box.left - 1 && degree.right <= box.right + 1 &&
+          institution.left >= box.left - 1 && institution.right <= box.right + 1;
+      });
+      assert.ok(fits, `Education card content overlaps or escapes at ${width}px`);
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
+    if (screenshotDir && (width === 390 || width === 1280)) {
+      await page.waitForTimeout(1200);
       await page.screenshot({ path: `${screenshotDir}/education-${width}-top.png` });
     }
     await page.close();
@@ -111,7 +134,9 @@ test("project slides show the matching titles and only available repository link
 test("CV, social URLs, and metadata are present", async () => {
   const page = await browser.newPage();
   await page.goto(origin);
-  assert.match(await page.title(), /Hossein Bajan.*Senior Front-End Engineer/);
+  assert.match(await page.title(), /Hossein Bajan.*Software Engineer/);
+  assert.equal(await page.locator("section > div > div span.text-xl").first().textContent(), "Software Engineer");
+  assert.equal(JSON.parse(await page.locator('script[type="application/ld+json"]').textContent()).jobTitle, "Software Engineer");
   assert.equal(await page.locator('a[download]').getAttribute("href"), "/resume/Hossein-Bajan-Resume.pdf");
   for (const url of [
     "https://github.com/hbsoftco",
@@ -133,6 +158,8 @@ test("mobile navigation and contact fields remain usable", async () => {
   await page.getByRole("button", { name: "Open menu" }).click();
   await page.getByRole("link", { name: "contact", exact: true }).click();
   await page.getByRole("heading", { name: "Get in touch" }).waitFor();
+  await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === "progressbar");
+  await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === null);
   await page.getByRole("button", { name: "Open email draft" }).click();
   assert.equal(await page.locator('input[name="firstName"]').evaluate((input) => input.validity.valueMissing), true);
   await page.getByRole("textbox", { name: "First name" }).fill("Test");
@@ -146,5 +173,147 @@ test("mobile navigation and contact fields remain usable", async () => {
     await page.locator("form").evaluate((form) => new FormData(form).get("topic")),
     "Frontend Architecture",
   );
+  await page.close();
+});
+
+test("Languages tab presents the four self-reported languages without disturbing Education", async () => {
+  for (const width of [390, 768, 1280]) {
+    const page = await browser.newPage({ viewport: { width, height: 844 } });
+    await page.goto(`${origin}/resume`);
+    const tab = page.getByRole("tab", { name: "Languages" });
+    await tab.focus();
+    await tab.press("Enter");
+    assert.equal(await tab.getAttribute("aria-selected"), "true");
+    await page.getByRole("heading", { name: "Languages" }).waitFor();
+    for (const [language, proficiency] of [
+      ["Persian (Farsi)", "Native"],
+      ["Kurdish (Kurmanji)", "Native"],
+      ["English", "B2 — Upper-Intermediate"],
+      ["German", "A2 — Elementary"],
+    ]) {
+      const card = page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: language }) });
+      assert.equal(await card.count(), 1);
+      await card.getByText(proficiency, { exact: true }).waitFor();
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
+    if (screenshotDir && (width === 390 || width === 1280)) {
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: `${screenshotDir}/languages-${width}.png` });
+    }
+    await page.getByRole("tab", { name: "Education" }).click();
+    await page.getByText("My education", { exact: true }).waitFor();
+    await page.getByRole("tab", { name: "About me" }).click();
+    await page.getByText(/I am a Software Engineer specializing in Vue\.js/).waitFor();
+    await page.close();
+  }
+});
+
+test("global navigation progress follows visual completion and clears on history or interrupted navigation", { timeout: 60_000 }, async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 844 } });
+  const waitForProgressToClear = async () => {
+    await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === "progressbar");
+    await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === null);
+  };
+  await page.goto(origin, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1200);
+  const bar = page.getByTestId("navigation-progress");
+  assert.equal(await bar.count(), 1);
+  assert.equal(await bar.getAttribute("role"), null);
+  await page.locator('header a[href="/services"]').click();
+  await page.waitForURL("**/services");
+  await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === "progressbar");
+  const active = await bar.evaluate((element) => ({
+    now: element.getAttribute("aria-valuenow"),
+    top: element.getBoundingClientRect().top,
+    height: element.getBoundingClientRect().height,
+    direction: element.getAttribute("dir"),
+    pointerEvents: getComputedStyle(element).pointerEvents,
+    transformOrigin: element.firstElementChild && getComputedStyle(element.firstElementChild).transformOrigin,
+    progress: element.firstElementChild?.style.transform,
+  }));
+  assert.equal(active.now, null);
+  assert.equal(active.top, 0);
+  assert.equal(active.height, 3);
+  assert.equal(active.direction, "ltr");
+  assert.equal(active.pointerEvents, "none");
+  assert.match(active.transformOrigin, /^0px/);
+  assert.notEqual(active.progress, "scaleX(1)");
+  await page.waitForFunction(() => document.querySelector('[data-testid="navigation-progress"]')?.getAttribute("role") === null);
+  await page.locator('header a[href="/services"]').click();
+  await page.waitForTimeout(200);
+  assert.equal(await bar.getAttribute("role"), null);
+
+  await page.locator('header a[href="/resume"]').click();
+  await page.waitForURL("**/resume");
+  await waitForProgressToClear();
+  await page.goBack();
+  await page.waitForURL("**/services");
+  await waitForProgressToClear();
+  await page.goForward();
+  await page.waitForURL("**/resume");
+  await waitForProgressToClear();
+
+  await page.locator('header a[href="/work"]').click();
+  await page.locator('header a[href="/contact"]').first().click();
+  await page.waitForURL("**/contact");
+  await waitForProgressToClear();
+  assert.equal(await bar.count(), 1);
+  await page.close();
+});
+
+test("reduced motion and non-route clicks do not leave a progress bar", async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 844 }, reducedMotion: "reduce" });
+  await page.goto(origin, { waitUntil: "networkidle" });
+  const bar = page.getByTestId("navigation-progress");
+  await page.evaluate(() => {
+    const bar = document.querySelector('[data-testid="navigation-progress"]');
+    window.__progressShown = false;
+    new MutationObserver(() => {
+      if (bar?.getAttribute("role") === "progressbar") window.__progressShown = true;
+    }).observe(bar, { attributes: true, attributeFilter: ["role"] });
+  });
+  await page.locator('header a[href="/services"]').click();
+  await page.waitForURL("**/services");
+  await page.waitForTimeout(350);
+  assert.equal(await bar.getAttribute("role"), null);
+  assert.equal(await page.evaluate(() => window.__progressShown), false);
+  await page.goto(origin, { waitUntil: "networkidle" });
+  await page.locator('header a[href="/resume"]').evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0, ctrlKey: true }));
+  });
+  await page.waitForTimeout(180);
+  assert.equal(await bar.getAttribute("role"), null);
+  await page.locator('a[href="https://github.com/hbsoftco"]').evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
+  });
+  await page.waitForTimeout(180);
+  assert.equal(await bar.getAttribute("role"), null);
+  const download = page.waitForEvent("download");
+  await page.locator("a[download]").click();
+  assert.match((await download).suggestedFilename(), /Hossein-Bajan-Resume\.pdf/);
+  assert.equal(await bar.getAttribute("role"), null);
+  await page.close();
+});
+
+test("a canceled navigation cannot leave progress stuck", async () => {
+  const page = await browser.newPage();
+  await page.goto(origin, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1200);
+  await page.clock.install();
+  await page.evaluate(() => {
+    const link = document.createElement("a");
+    link.href = "/services";
+    link.textContent = "Canceled navigation";
+    link.addEventListener("click", (event) => event.preventDefault());
+    document.body.append(link);
+    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
+  });
+  await page.clock.runFor(200);
+  assert.equal(await page.getByTestId("navigation-progress").getAttribute("role"), "progressbar");
+  await page.clock.runFor(15000);
+  assert.equal(await page.getByTestId("navigation-progress").getAttribute("role"), null);
+  assert.equal(new URL(page.url()).pathname, "/");
   await page.close();
 });

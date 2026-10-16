@@ -14,7 +14,7 @@ const stats = [
     text: "Users Reached",
   },
   {
-    num: 1,
+    num: 2.5,
     suffix: "+",
     text: "Years in Technical Leadership",
   },

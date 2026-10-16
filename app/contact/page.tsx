@@ -16,7 +16,7 @@ import {
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { FormEvent } from "react";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const info = [
   {
@@ -34,6 +34,7 @@ const info = [
 ];
 
 const Contact = () => {
+  const reduceMotion = useReducedMotion();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const fields = new FormData(event.currentTarget);
@@ -55,8 +56,8 @@ const Contact = () => {
       animate={{
         opacity: 1,
         transition: {
-          delay: 2.3,
-          duration: 0.3,
+          delay: reduceMotion ? 0 : 0.65,
+          duration: reduceMotion ? 0 : 0.3,
           ease: "easeIn",
         },
       }}

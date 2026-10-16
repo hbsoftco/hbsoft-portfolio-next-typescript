@@ -37,3 +37,6 @@ next-env.d.ts
 
 
 .open-next
+
+# Cloudflare Wrangler local data
+.wrangler/

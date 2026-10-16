@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { BsArrowDownRight } from "react-icons/bs";
 
 const services = [
@@ -31,6 +31,7 @@ const services = [
 ];
 
 const Services = () => {
+  const reduceMotion = useReducedMotion();
   return (
     <section className="min-h-[80vh] flex flex-col justify-center py-12 xl:py-0">
       <div className="container mx-auto">
@@ -39,8 +40,8 @@ const Services = () => {
           animate={{
             opacity: 1,
             transition: {
-              delay: 2.3,
-              duration: 0.3,
+              delay: reduceMotion ? 0 : 0.65,
+              duration: reduceMotion ? 0 : 0.3,
               ease: "easeIn",
             },
           }}

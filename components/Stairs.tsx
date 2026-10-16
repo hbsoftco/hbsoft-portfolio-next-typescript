@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const stairAnimation = {
   initial: {
@@ -18,6 +18,7 @@ const reverseIndex = (index: number) => {
 };
 
 const Stairs = () => {
+  const reduceMotion = useReducedMotion();
   return (
     <>
       {/* render 6 animation divs, each representing a step of the stairs */}
@@ -31,9 +32,9 @@ const Stairs = () => {
             animate="animate"
             exit="exit"
             transition={{
-              duration: 0.2,
+              duration: reduceMotion ? 0 : 0.2,
               ease: "easeInOut",
-              delay: reverseIndex(index) * 0.1,
+              delay: reduceMotion ? 0 : reverseIndex(index) * 0.1,
             }}
             className="h-full w-full bg-white relative"
           />
